@@ -1,7 +1,24 @@
-﻿namespace HvSOS100Logger;
+﻿using System.Net.Http.Json;
 
-public class LogLocalService
+namespace HvSOS100Logger;
+
+public class LogService
 {
+    private const string BaseUrl = "https://informatik6.ei.hv.se/logapi/";
+    private readonly HttpClient _httpClient = new();
+
+    public async Task<bool> CreateApiLog(string sourceSystem, string message)
+    {
+        var log = new Log
+        {
+            TimeStamp = DateTime.Now,
+            SourceSystem = sourceSystem,
+            Message = message
+        };
+        var response = await _httpClient.PostAsJsonAsync($"{BaseUrl}api/Logs", log);
+        return response.IsSuccessStatusCode;
+    }
+
     private const string LogDirectoryPath = @"C:\Temp\HvSOS100Logs";
     private const string LogFilePath = LogDirectoryPath + @"\Log.txt";
 

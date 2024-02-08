@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <Title>HvSOS100Logger</Title>
     <Authors>markus-lamm,</Authors>
+    <Version>1.1.0</Version>
   </PropertyGroup>
 
 </Project>
