@@ -19,7 +19,7 @@ public class LogService
         return response.IsSuccessStatusCode;
     }
 
-    private const string LogDirectoryPath = @"C:\Temp\HvSOS100Logs";
+    private const string LogDirectoryPath = @"C:\Temp\Hv.SOS100.Logger.LocalLogs";
     private const string LogFilePath = LogDirectoryPath + @"\Log.txt";
 
     public void CreateLocalLog(string sourceSystem, string message)
