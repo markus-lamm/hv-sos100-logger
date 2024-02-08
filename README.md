@@ -1,1 +1,1 @@
-# HvSOS100Logger
+# Hv.SOS100.Logger
