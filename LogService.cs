@@ -1,6 +1,6 @@
 ﻿using System.Net.Http.Json;
 
-namespace Hv.SOS100.Logger;
+namespace Hv.Sos100.Logger2;
 
 public class LogService
 {
@@ -19,7 +19,7 @@ public class LogService
         return response.IsSuccessStatusCode;
     }
 
-    private const string LogDirectoryPath = @"C:\Temp\Hv.SOS100.Logger.LocalLogs";
+    private const string LogDirectoryPath = @"C:\Temp\Hv.Sos100.Logger2.LocalLogs";
     private const string LogFilePath = LogDirectoryPath + @"\Log.txt";
 
     public void CreateLocalLog(string sourceSystem, string message)

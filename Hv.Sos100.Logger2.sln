@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hv.SOS100.Logger", "Hv.SOS100.Logger.csproj", "{7DF9DE02-7875-4208-8E9E-9F52005E003C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hv.Sos100.Logger2", "Hv.Sos100.Logger2.csproj", "{7DF9DE02-7875-4208-8E9E-9F52005E003C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

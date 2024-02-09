@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Title>Hv.SOS100.Logger</Title>
+    <Title>Hv.Sos100.Logger2</Title>
     <Authors>markus-lamm,</Authors>
     <Version>1.2.0</Version>
   </PropertyGroup>
