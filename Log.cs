@@ -1,4 +1,4 @@
-﻿namespace Hv.Sos100.Logger2;
+﻿namespace Hv.Sos100.Logger;
 
 public class Log
 {
