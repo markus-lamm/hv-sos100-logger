@@ -7,6 +7,9 @@ public class LogService
     private const string BaseUrl = "https://informatik6.ei.hv.se/logapi/";
     private readonly HttpClient _httpClient = new();
 
+    /// <summary>
+    /// Create a log in the database
+    /// </summary>
     public async Task<bool> CreateApiLog(string sourceSystem, string message)
     {
         var log = new Log
@@ -22,6 +25,9 @@ public class LogService
     private const string LogDirectoryPath = @"C:\Temp\Hv.Sos100.Logger.LocalLogs";
     private const string LogFilePath = LogDirectoryPath + @"\Log.txt";
 
+    /// <summary>
+    /// Create a local log file, the file will be placed in the directory C:\Temp\Hv.Sos100.Logger.LocalLogs
+    /// </summary>
     public void CreateLocalLog(string sourceSystem, string message)
     {
         if (!Directory.Exists(LogDirectoryPath))
