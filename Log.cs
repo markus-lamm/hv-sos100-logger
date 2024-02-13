@@ -1,9 +1,9 @@
 ﻿namespace Hv.Sos100.Logger;
 
-public class Log
+internal class Log
 {
-    public int Id { get; set; }
-    public DateTime? TimeStamp { get; set; }
-    public string? SourceSystem { get; set; }
-    public string? Message { get; set; }
+    internal int Id { get; set; }
+    internal DateTime? TimeStamp { get; set; }
+    internal string? SourceSystem { get; set; }
+    internal string? Message { get; set; }
 }
