@@ -9,6 +9,8 @@
     <Version>1.2.0</Version>
     <PackageIcon>Logging.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageProjectUrl>https://github.com/markus-lamm/hv-sos100-logger</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/markus-lamm/hv-sos100-logger</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
