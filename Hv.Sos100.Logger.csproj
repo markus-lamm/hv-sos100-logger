@@ -7,6 +7,19 @@
     <Title>Hv.Sos100.Logger</Title>
     <Authors>markus-lamm,</Authors>
     <Version>1.2.0</Version>
+    <PackageIcon>Logging.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Update="Logging.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
