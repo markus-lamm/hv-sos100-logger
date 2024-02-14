@@ -4,7 +4,7 @@ namespace Hv.Sos100.Logger;
 
 public class LogService
 {
-    private const string BaseUrl = "https://informatik6.ei.hv.se/logapi/";
+    private const string BaseUrl = "https://informatik6.ei.hv.se/logapi";
     private readonly HttpClient _httpClient = new();
 
     /// <summary>
@@ -18,7 +18,7 @@ public class LogService
             SourceSystem = sourceSystem,
             Message = message
         };
-        var response = await _httpClient.PostAsJsonAsync($"{BaseUrl}api/Logs", log);
+        var response = await _httpClient.PostAsJsonAsync($"{BaseUrl}/api/Logs", log);
         return response.IsSuccessStatusCode;
     }
 
