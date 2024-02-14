@@ -4,11 +4,11 @@ namespace Hv.Sos100.Logger;
 
 public class LogService
 {
-    private const string BaseUrl = "https://informatik6.ei.hv.se/logapi/"; //TODO potentially modify if the API is moved
+    private const string BaseUrl = "https://informatik6.ei.hv.se/logapi/";
     private readonly HttpClient _httpClient = new();
 
     /// <summary>
-    /// Create a log in the database
+    /// Create a log in the database, which can be viewed in the web application
     /// </summary>
     public async Task<bool> CreateApiLog(string sourceSystem, string message)
     {
