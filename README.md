@@ -29,16 +29,23 @@ var logger = new LogService();
 3. Call on api logging using the LogService object and collect the result in a variable
 
 ```csharp
-var logResult = await logger.CreateApiLog("mySystem", "this is a message");
+var logResult = await logger.CreateApiLog("mySystem", 1, "this is a message");
 ```
 
 4. If the api logging fails call the local logging
 
 ```csharp
-logger.CreateLocalLog("mySystem", "this is a message");
+logger.CreateLocalLog("mySystem", 1, "this is a message");
 ```
+
+5. Alternatively let the log nuget create the logs in the first place it can, it will attempt to create an api log first and a local log if unsuccessful
+   
+```csharp
+logger.CreateLog("mySystem", 1, "this is a message");
+```
+
 > [!NOTE]
-> Both `CreateApiLog` and `CreateLocalLog` takes two parameters `sourceSystem` and `message`. Use your system name as the input for `sourceSystem` ex. `UserService` and describe the error in `message`. You can either use the exception source and message if they are available or write custom strings.
+> All log methods take three parameters `sourceSystem`, `severityLevel` and `message`. Use your system name as the input for `sourceSystem` ex. `UserService` and describe the error in `message`. You can either use the exception source and message if they are available or write custom strings. The `severityLevel` has to match three predefined statuses `1` for Info, `2` for Warning or `3` for Error, any attempt to input anything but 1, 2 or 3 will result in an exception when the log method is invoked.
 
 ## Example
 
@@ -54,12 +61,12 @@ catch (Exception ex)
     var logger = new LogService();
 
     // Call the api to log the issue
-    var logResult = await logger.CreateApiLog(ex.Source, ex.Message);
+    var logResult = await logger.CreateApiLog(ex.Source, 3, ex.Message);
 
     // If the logging api call fails use local logging
     if (!logResult)
     {
-        logger.CreateLocalLog(ex.Source, ex.Message);
+        logger.CreateLocalLog(ex.Source, 3, ex.Message);
     }
 }
 ```
