@@ -58,6 +58,16 @@ public class LogService
         }
     }
 
+    /// <summary>
+    /// Will attempt to create a log in the api and if unsuccessful will create a local log,
+    /// OBS severity has to match either 1'Info', 2'Warning', 3'Error' or it will generate an exception
+    /// </summary>
+    public async Task CreateLog(string sourceSystem, int severityLevel, string message)
+    {
+        var success = await CreateApiLog(sourceSystem, severityLevel, message);
+        if(!success) { CreateLocalLog(sourceSystem, severityLevel, message) };
+    }
+
     private static string ValidateSeverity(int severityLevel)
     {
         return severityLevel switch
