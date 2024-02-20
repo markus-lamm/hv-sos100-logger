@@ -65,7 +65,7 @@ public class LogService
     public async Task CreateLog(string sourceSystem, int severityLevel, string message)
     {
         var success = await CreateApiLog(sourceSystem, severityLevel, message);
-        if(!success) { CreateLocalLog(sourceSystem, severityLevel, message) };
+        if(!success) { CreateLocalLog(sourceSystem, severityLevel, message); }
     }
 
     private static string ValidateSeverity(int severityLevel)
