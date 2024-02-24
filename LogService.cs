@@ -7,20 +7,14 @@ public class LogService
     private const string BaseUrl = "https://informatik6.ei.hv.se/logapi";
     private readonly HttpClient _httpClient = new();
 
-    /// <summary>
-    /// Create a log in the database, which can be viewed in the web application,
-    /// OBS severity has to match either 1'Info', 2'Warning', 3'Error' or it will generate an exception
-    /// </summary>
-    public async Task<bool> CreateApiLog(string sourceSystem, int severityLevel, string message)
+    private async Task<bool> CreateApiLog(string sourceSystem, Severity severity, string message)
     {
-        var severity = ValidateSeverity(severityLevel);
-
         var log = new Log
         {
             TimeStamp = DateTime.Now,
             SourceSystem = sourceSystem,
-            Message = message,
-            Severity = severity
+            Severity = severity.ToString(),
+            Message = message
         };
 
         var response = await _httpClient.PostAsJsonAsync($"{BaseUrl}/api/Logs", log);
@@ -30,14 +24,8 @@ public class LogService
     private const string LogDirectoryPath = @"C:\Temp\Hv.Sos100.Logger.LocalLogs";
     private const string LogFilePath = LogDirectoryPath + @"\Log.txt";
 
-    /// <summary>
-    /// Create a local log file, the file will be placed in the directory C:\Temp\Hv.Sos100.Logger.LocalLogs,
-    /// OBS severity has to match either 1'Info', 2'Warning', 3'Error' or it will generate an exception
-    /// </summary>
-    public void CreateLocalLog(string sourceSystem, int severityLevel, string message)
+    private static void CreateLocalLog(string sourceSystem, Severity severity, string message)
     {
-        var severity = ValidateSeverity(severityLevel);
-
         if (!Directory.Exists(LogDirectoryPath))
         {
             Directory.CreateDirectory(LogDirectoryPath);
@@ -59,23 +47,71 @@ public class LogService
     }
 
     /// <summary>
-    /// Will attempt to create a log in the api and if unsuccessful will create a local log,
-    /// OBS severity has to match either 1'Info', 2'Warning', 3'Error' or it will generate an exception
+    /// Logs an event to the api and/or local log file. Only use this method if you are not logging an exception.
     /// </summary>
-    public async Task CreateLog(string sourceSystem, int severityLevel, string message)
+    /// <param name="sourceSystem">The name of the system which records the log.</param>
+    /// <param name="severity">The severity of the log being recorded. Choose between Severity.Info, Severity.Warning, Severity.Error for what fits best.</param>
+    /// <param name="message">The log message which contians the main log information.</param>
+    /// <param name="logType">The type of logging to perform (optional). Use LogType.Api to only attempt an Api log, 
+    /// use LogType.Local to only attempt a local log. Defaults to LogType.Both if not specified.</param>
+    public async Task CreateLog(string sourceSystem, Severity severity, string message, LogType logType = LogType.Both)
     {
-        var success = await CreateApiLog(sourceSystem, severityLevel, message);
-        if(!success) { CreateLocalLog(sourceSystem, severityLevel, message); }
+        if (logType == LogType.Both)
+        {
+            var success = await CreateApiLog(sourceSystem, severity, message);
+            if (!success) { CreateLocalLog(sourceSystem, severity, message); }
+        }
+        else if (logType == LogType.Api)
+        {
+            await CreateApiLog(sourceSystem, severity, message);
+        }
+        else if (logType == LogType.Local)
+        {
+            CreateLocalLog(sourceSystem, severity, message);
+        }
     }
 
-    private static string ValidateSeverity(int severityLevel)
+    /// <summary>
+    /// Logs an exception to the api and/or local log file. Only use this method if you want to log an exception. 
+    /// </summary>
+    /// <param name="sourceSystem">The name of the system which records the log.</param>
+    /// <param name="exception">The exception object created in a try catch block.</param>
+    /// <param name="logType">The type of logging to perform (optional). Use LogType.Api to only attempt an Api log, 
+    /// use LogType.Local to only attempt a local log. Defaults to LogType.Both if not specified.</param>
+    public async Task CreateLog(string sourceSystem, Exception exception, LogType logType = LogType.Both)
     {
-        return severityLevel switch
+        if (logType == LogType.Both)
         {
-            1 => "Info",
-            2 => "Warning",
-            3 => "Error",
-            _ => throw new ArgumentException("Invalid severity value. Must be either 1'Info', 2'Warning', 3'Error'"),
-        };
+            var success = await CreateApiLog(sourceSystem, Severity.Error, exception.Message);
+            if (!success) { CreateLocalLog(sourceSystem, Severity.Error, exception.Message); }
+        }
+        else if (logType == LogType.Api)
+        {
+            await CreateApiLog(sourceSystem, Severity.Error, exception.Message);
+        }
+        else if (logType == LogType.Local)
+        {
+            CreateLocalLog(sourceSystem, Severity.Error, exception.Message);
+        }
+    }
+
+    /// <summary>
+    /// Choose between Api, Local or Both to specify the type of logging to perform.
+    /// </summary>
+    public enum LogType
+    {
+        Api,
+        Local,
+        Both
+    }
+
+    /// <summary>
+    /// Choose between Info, Warning or Error to specify the severity of the log being recorded.
+    /// </summary>
+    public enum Severity
+    {
+        Info,
+        Warning,
+        Error
     }
 }
