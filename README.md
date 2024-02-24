@@ -36,7 +36,7 @@ await logger.CreateLog("mySystem", exception);
 4. If you wish to specify where the logging should occour use the LogType parameter. The LogType parameter is optional and the method will default to Both if unspecified. Meaning it will attempt to create an api log and only a local log if unsuccessful.
 
  ```csharp
-await logger.CreateLog("mySystem", LogService.Severity.Error, "this is a message", LogType.Api);
+await logger.CreateLog("mySystem", LogService.Severity.Error, "this is a message", LogService.LogType.Api);
 ```
 
 > [!NOTE]
