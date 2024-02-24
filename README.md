@@ -8,11 +8,10 @@ Search for **Hv.Sos100.Logger** and install the latest version of the NuGet pack
 
 ## Using the logger
 
-The logger is most appropriate to use when you believe that an api call may cause an error. But can be used wherever an error may occour.
+The logger should be used when any important information that should be recorded is created.
 
 > [!IMPORTANT]
-> Using api logging will place the log data in the log database of Group 6. Using local logging the log file will be avaliable in the computer running the system at `C:\Temp\Hv.Sos100.Logger.LocalLogs\Log.txt`.
-> It is recommended to use api logging first and local logging as a fallback should api logging fail.
+> If the log is created with the api it will be placed in the database of Group 6. If the log is created locally the log file will be avaliable in the computer running the system at `C:\Temp\Hv.Sos100.Logger.LocalLogs\Log.txt`.
 
 1. Add the using statement
  
@@ -26,31 +25,27 @@ using Hv.Sos100.Logger;
 var logger = new LogService();
 ```
 
-3. Call on api logging using the LogService object and collect the result in a variable
+3. Call on the logging method using the LogService object. The first method can be used anywhere. The second method can only be used where an exception object is created, such as inside a try catch block.
 
 ```csharp
-var logResult = await logger.CreateApiLog("mySystem", 1, "this is a message");
+await logger.CreateLog("mySystem", Severity.Error, "this is a message");
+//OR
+await logger.CreateLog("mySystem", exception);
 ```
 
-4. If the api logging fails call the local logging
+4. If you wish to specify where the logging should occour use the LogType parameter. The LogType parameter is optional and the method will default to Both if unspecified. Meaning it will attempt to create an api log and only a local log if unsuccessful.
 
-```csharp
-logger.CreateLocalLog("mySystem", 1, "this is a message");
-```
-
-5. Alternatively let the log nuget create the logs in the first place it can, it will attempt to create an api log first and a local log if unsuccessful
-   
-```csharp
-logger.CreateLog("mySystem", 1, "this is a message");
+ ```csharp
+await logger.CreateLog("mySystem", Severity.Error, "this is a message", LogType.Api);
 ```
 
 > [!NOTE]
-> All log methods take three parameters `sourceSystem`, `severityLevel` and `message`. Use your system name as the input for `sourceSystem` ex. `UserService` and describe the error in `message`. You can either use the exception source and message if they are available or write custom strings. The `severityLevel` has to match three predefined statuses `1` for Info, `2` for Warning or `3` for Error, any attempt to input anything but 1, 2 or 3 will result in an exception when the log method is invoked.
+> The NuGet consists of two public log methods both named `CreateLog`. Invoke the right method based on the parameters you use to call the method. One method expects an exception object, only use this variant inside a try catch block. The other method can be used universally and also inside a try catch block if you only want to use one variant of the method globally.
 
 ## Example
 
 ```csharp
-// Simulating a failed operation
+// Simulating a failed operation inside a try catch block
 try
 {
     //Api call or other non-guaranteed operation fails
@@ -61,12 +56,12 @@ catch (Exception ex)
     var logger = new LogService();
 
     // Call the api to log the issue
-    var logResult = await logger.CreateApiLog(ex.Source, 3, ex.Message);
+    await logger.CreateLog("mySystem", exception);
+}
 
-    // If the logging api call fails use local logging
-    if (!logResult)
-    {
-        logger.CreateLocalLog(ex.Source, 3, ex.Message);
-    }
+// Logging outside a try catch block
+if(true)
+{
+    await logger.CreateLog("mySystem", Severity.Info, "this is a message");
 }
 ```
